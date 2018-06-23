@@ -22,15 +22,15 @@
 
 function printUsageAndExit()
 {
-	echo "bootstrap.sh [OPTIONS]"
-	echo
-	echo "OPTIONS:"
-	echo "-h or --help - Print help and usage message"
-	echo "--gtest_root PATH - GTest install root path"
-	echo "--gtest_clone PATH - Clone GTest to current project directory"
-	echo "--ninja - Build the project with ninja build"
+    echo "bootstrap.sh [OPTIONS]"
+    echo
+    echo "OPTIONS:"
+    echo "-h or --help - Print help and usage message"
+    echo "--gtest_root PATH - GTest install root path"
+    echo "--gtest_clone PATH - Clone GTest to current project directory"
+    echo "--ninja - Build the project with ninja build"
 
-	exit $1
+    exit $1
 }
 
 unset GTEST_ROOT
@@ -41,30 +41,30 @@ while [[ $# -gt 0 ]]; do
 key="$1"
 
 case $key in
-	-h|--help)
-	printUsageAndExit 0
-	shift # past argument
-	;;
-	--gtest_root)
-	GTEST_ROOT="$2"
-	shift # past argument
-	shift # past value
-	;;
-	--gtest_clone)
-	GTEST_CLONE_PATH="$2"
-	shift # past argument
-	shift # past value
-	;;
-	--ninja)
-	USE_NINJA=True
-	shift # past argument
-	;;
-	*)
-	echo "Unknown option: $key"
-	echo
-	printUsageAndExit 1
-	shift # past argument
-	;;
+    -h|--help)
+    printUsageAndExit 0
+    shift # past argument
+    ;;
+    --gtest_root)
+    GTEST_ROOT="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    --gtest_clone)
+    GTEST_CLONE_PATH="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    --ninja)
+    USE_NINJA=True
+    shift # past argument
+    ;;
+    *)
+    echo "Unknown option: $key"
+    echo
+    printUsageAndExit 1
+    shift # past argument
+    ;;
 esac
 done
 
@@ -74,25 +74,25 @@ if [ ! -z "$(ls)" ]; then
 fi
 
 if [[ -v GTEST_ROOT ]]; then
-	echo "Using $GTEST_ROOT"
-	export GTEST_ROOT=$GTEST_ROOT
+    echo "Using $GTEST_ROOT"
+    export GTEST_ROOT=$GTEST_ROOT
 else
-	echo "Setting up and building GTest"
+    echo "Setting up and building GTest"
 
-	git clone $GTEST_CLONE_PATH
-	cd googletest
-	mkdir build
-	cd build
-	if [ $USE_NINJA ]; then
-		cmake -GNinja -DCMAKE_INSTALL_PREFIX=installdir ..
-	else
-		cmake -DCMAKE_INSTALL_PREFIX=installdir ..
-	fi
-	cmake --build . --target install
+    git clone $GTEST_CLONE_PATH
+    cd googletest
+    mkdir build
+    cd build
+    if [ $USE_NINJA ]; then
+        cmake -GNinja -DCMAKE_INSTALL_PREFIX=installdir ..
+    else
+        cmake -DCMAKE_INSTALL_PREFIX=installdir ..
+    fi
+    cmake --build . --target install
 
-	export GTEST_ROOT=$(pwd)/installdir
+    export GTEST_ROOT=$(pwd)/installdir
 
-	cd ../..
+    cd ../..
 fi
 
 cat > test.cpp << EOF
@@ -123,7 +123,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU")
 endif()
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     target_compile_options(tests PRIVATE -Wweak-vtables -Wexit-time-destructors
-										 -Wglobal-constructors -Wmissing-noreturn)
+                                         -Wglobal-constructors -Wmissing-noreturn)
 endif()
 
 add_test(NAME simple-run COMMAND $<TARGET_FILE:tests>)
@@ -132,9 +132,9 @@ EOF
 mkdir build
 cd build
 if [ $USE_NINJA ]; then
-	cmake -GNinja ..
+    cmake -GNinja ..
 else
-	cmake ..
+    cmake ..
 fi
 cmake --build .
 ./tests
